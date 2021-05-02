@@ -10,6 +10,12 @@ $(document).ready(() => {
 
     const scrollDown = () => window.scrollTo(0, document.body.scrollHeight);
 
+    const showTextWithEffect = (tag, text) => {
+        $(tag).fadeIn("fast", () => {
+            $(tag).text(text)
+        })
+    } 
+
     $(button).click((e) => {
         e.preventDefault()
         
@@ -21,6 +27,15 @@ $(document).ready(() => {
         }
     })
 
+    $(input).keypress((e) => {
+        socket.emit('notification:typing', "Alguien esta escribiendo...");
+    })
+
+
+    $(input).keyup((e) => {
+        socket.emit('notification:typing', " ")
+    })
+
 
     socket.on('chat:message', (msg) => {
         let container = $("#chat-container")
@@ -28,6 +43,13 @@ $(document).ready(() => {
         container.append(chatTemplate(msg))
 
         scrollDown()
+    })
+
+    socket.on('notification:typing', (notification) => {
+        $("#notification").text(notification);
+
+        showTextWithEffect("#notification", notification)
+    
     })
 
 })

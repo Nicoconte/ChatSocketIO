@@ -31,6 +31,10 @@ io.on('connection', (socket) => {
         io.emit('chat:message', msg)
     })
 
+    socket.on("notification:typing", (notification) => {
+        io.emit('notification:typing', notification)
+    })
+
 })
 
 server.listen(PORT, () => {
